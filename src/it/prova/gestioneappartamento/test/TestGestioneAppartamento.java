@@ -22,6 +22,8 @@ public class TestGestioneAppartamento {
 
 		testUpdateAppartamento(appartamentoDAOInstance);
 
+		testDeleteAppartamento(appartamentoDAOInstance);
+
 	}
 
 	private static void testInsertAppartamento(AppartamentoDAO appartamentoDAOInstance) {
@@ -50,6 +52,18 @@ public class TestGestioneAppartamento {
 
 		System.out.println(appartamentoDaAggiornare);
 		System.out.println("Fine testUpdateNegozio!");
+	}
+
+	private static void testDeleteAppartamento(AppartamentoDAO appartamentoDAOInstance) {
+		System.out.println("Inizio testDeleteAppartamento");
+
+		Appartamento appartamentoDaEliminare = appartamentoDAOInstance.list().get(4);
+
+		int quantiAppartamentiEliminati = appartamentoDAOInstance.delete(appartamentoDaEliminare);
+		if (quantiAppartamentiEliminati < 1)
+			throw new RuntimeException("Cancellazione fallita!");
+		System.out.println("Sono stati eleminati " + quantiAppartamentiEliminati + " appartamenti!");
+		System.out.println("Fine testDeleteAppartamento!");
 	}
 
 }
