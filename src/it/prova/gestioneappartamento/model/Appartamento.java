@@ -67,4 +67,10 @@ public class Appartamento {
 		this.dataCostruzione = dataCostruzione;
 	}
 
+	@Override
+	public String toString() {
+		return "Appartamento [id=" + id + ", quartiere=" + quartiere + ", metriquadrati=" + metriQuadrati + ", prezzo="
+				+ prezzo + ", datacostruzione=" + dataCostruzione + "]";
+	}
+
 }

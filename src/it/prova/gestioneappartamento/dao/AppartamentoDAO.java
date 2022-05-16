@@ -37,6 +37,7 @@ public class AppartamentoDAO {
 		}
 		return result;
 	}
+
 	public int insert(Appartamento appartamentoInput) {
 
 		if (appartamentoInput == null)
@@ -59,6 +60,29 @@ public class AppartamentoDAO {
 		return result;
 	}
 
-	
+	public int update(Appartamento appartamentoInput) {
+
+		if (appartamentoInput == null || appartamentoInput.getId() < 1)
+			throw new RuntimeException("Impossibile modificare l'appartamento!");
+
+		int result = 0;
+		try (Connection c = MyConnection.getConnection();
+				PreparedStatement ps = c.prepareStatement(
+						"UPDATE appartamento a SET a.quartiere=?, a.metriquadrati=?, a.prezzo=?, a.datacostruzione=? where a.id=?;")) {
+
+			ps.setString(1, appartamentoInput.getQuartiere());
+			ps.setInt(2, appartamentoInput.getMetriQuadrati());
+			ps.setInt(3, appartamentoInput.getPrezzo());
+			ps.setDate(4, new java.sql.Date(appartamentoInput.getDataCostruzione().getTime()));
+			ps.setLong(5, appartamentoInput.getId());
+
+			result = ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 
 }

@@ -20,6 +20,8 @@ public class TestGestioneAppartamento {
 		testInsertAppartamento(appartamentoDAOInstance);
 		System.out.println("Adesso in tabella ci sono " + appartamentoDAOInstance.list().size() + " appartamenti.");
 
+		testUpdateAppartamento(appartamentoDAOInstance);
+
 	}
 
 	private static void testInsertAppartamento(AppartamentoDAO appartamentoDAOInstance) {
@@ -36,6 +38,18 @@ public class TestGestioneAppartamento {
 			throw new RuntimeException("Inserimento fallito!");
 
 		System.out.println("Fine testInserimentoNegozio!");
+	}
+
+	private static void testUpdateAppartamento(AppartamentoDAO appartamentoDAOInstance) {
+		System.out.println("Inizio testUpdateAppartamento");
+
+		Appartamento appartamentoDaAggiornare = appartamentoDAOInstance.list().get(6);
+		appartamentoDaAggiornare.setQuartiere("Parco Friuli");
+
+		appartamentoDAOInstance.update(appartamentoDaAggiornare);
+
+		System.out.println(appartamentoDaAggiornare);
+		System.out.println("Fine testUpdateNegozio!");
 	}
 
 }
