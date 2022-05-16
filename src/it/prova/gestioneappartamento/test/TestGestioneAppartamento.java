@@ -3,6 +3,7 @@ package it.prova.gestioneappartamento.test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import it.prova.gestioneappartamento.dao.AppartamentoDAO;
 import it.prova.gestioneappartamento.model.Appartamento;
@@ -23,6 +24,8 @@ public class TestGestioneAppartamento {
 		testUpdateAppartamento(appartamentoDAOInstance);
 
 		testDeleteAppartamento(appartamentoDAOInstance);
+
+		testFindById(appartamentoDAOInstance);
 
 	}
 
@@ -64,6 +67,22 @@ public class TestGestioneAppartamento {
 			throw new RuntimeException("Cancellazione fallita!");
 		System.out.println("Sono stati eleminati " + quantiAppartamentiEliminati + " appartamenti!");
 		System.out.println("Fine testDeleteAppartamento!");
+	}
+
+	private static void testFindById(AppartamentoDAO appartamentoDAOInstance) {
+		System.out.println("Inizio testFindById");
+		List<Appartamento> elencoAppartamentoPresenti = appartamentoDAOInstance.list();
+		if (elencoAppartamentoPresenti.size() < 1)
+			throw new RuntimeException("testFindById fallito! Non ci sono appartamenti sul database!");
+
+		Appartamento primoAppartamentoDellaLista = elencoAppartamentoPresenti.get(0);
+
+		Appartamento appartamentoCheRicercoColDAO = appartamentoDAOInstance
+				.findById(primoAppartamentoDellaLista.getId());
+		if (appartamentoCheRicercoColDAO == null)
+			throw new RuntimeException("testFindByIdArticolo fallito! Non c'e' questo appartamento!");
+		System.out.println(appartamentoCheRicercoColDAO);
+		System.out.println("Fine testFindByIdArticolo!");
 	}
 
 }

@@ -104,4 +104,34 @@ public class AppartamentoDAO {
 		return result;
 	}
 
+	public Appartamento findById(Long idAppartamentoInput) {
+
+		if (idAppartamentoInput == null || idAppartamentoInput < 1)
+			throw new RuntimeException("Impossibile caricare Negozio: id mancante!");
+
+		Appartamento result = null;
+		try (Connection c = MyConnection.getConnection();
+				PreparedStatement ps = c.prepareStatement("select * from appartamento a where a.id=?")) {
+
+			ps.setLong(1, idAppartamentoInput);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					result = new Appartamento();
+					result.setId(rs.getLong("id"));
+					result.setQuartiere(rs.getString("quartiere"));
+					result.setMetriQuadrati(rs.getInt("metriquadrati"));
+					result.setPrezzo(rs.getInt("prezzo"));
+					result.setDataCostruzione(rs.getDate("datacostruzione"));
+				} else {
+					result = null;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
 }
