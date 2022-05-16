@@ -3,6 +3,7 @@ package it.prova.gestioneappartamento.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,4 +135,34 @@ public class AppartamentoDAO {
 		return result;
 	}
 
+	public List<Appartamento> findByExample(Appartamento example) throws SQLException {
+		List<Appartamento> result = new ArrayList<Appartamento>();
+		Appartamento appartamentoTemp = null;
+		String query = "select * from appartamento a where 1=1";
+		if (example.getQuartiere() != null)
+			query += "and a.quartiere like " + example.getQuartiere() + '%';
+		if (example.getMetriQuadrati() != 0)
+			query += "and a.metriquadrati= " + example.getMetriQuadrati();
+		if (example.getPrezzo() != 0)
+			query += "and a.prezzo= " + example.getPrezzo();
+		if (example.getDataCostruzione() != null)
+			query += "and a.datacostruzione= " + example.getDataCostruzione();
+		query += ";";
+		try (Connection c = MyConnection.getConnection();
+				PreparedStatement ps = c.prepareStatement(query);
+				ResultSet rs = ps.executeQuery(query)) {
+
+			while (rs.next()) {
+				appartamentoTemp = new Appartamento();
+				appartamentoTemp.setId(rs.getLong("id"));
+				appartamentoTemp.setQuartiere(rs.getString("quartiere"));
+				appartamentoTemp.setMetriQuadrati(rs.getInt("metriquadrati"));
+				appartamentoTemp.setPrezzo(rs.getInt("prezzo"));
+				appartamentoTemp.setDataCostruzione(rs.getDate("datacostruzione"));
+
+				result.add(appartamentoTemp);
+			}
+		}
+		return result;
+	}
 }

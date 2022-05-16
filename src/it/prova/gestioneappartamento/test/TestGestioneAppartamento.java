@@ -1,5 +1,6 @@
 package it.prova.gestioneappartamento.test;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +27,8 @@ public class TestGestioneAppartamento {
 		testDeleteAppartamento(appartamentoDAOInstance);
 
 		testFindById(appartamentoDAOInstance);
+
+		testFindByExample(appartamentoDAOInstance);
 
 	}
 
@@ -83,6 +86,29 @@ public class TestGestioneAppartamento {
 			throw new RuntimeException("testFindByIdArticolo fallito! Non c'e' questo appartamento!");
 		System.out.println(appartamentoCheRicercoColDAO);
 		System.out.println("Fine testFindByIdArticolo!");
+	}
+
+	private static void testFindByExample(AppartamentoDAO appartamentoDAOInstance) {
+		System.out.println("Inizio testFindByExample");
+		List<Appartamento> result = null;
+		List<Appartamento> elencoAppartamentiPresenti = appartamentoDAOInstance.list();
+		if (elencoAppartamentiPresenti.size() < 1)
+			throw new RuntimeException("testFindByExample fallito! Non ci sono appartamenti sul database!");
+
+		Appartamento appartamentoPerTest = new Appartamento();
+		appartamentoPerTest.setQuartiere("Tos");
+		appartamentoPerTest.setMetriQuadrati(60);
+		appartamentoPerTest.setPrezzo(90000);
+		appartamentoPerTest.setDataCostruzione(null);
+		try {
+			result = appartamentoDAOInstance.findByExample(appartamentoPerTest);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (Appartamento appartamentoItem : result)
+			System.out.println(appartamentoItem);
+		System.out.println("Fine testFindByExample!");
+
 	}
 
 }
